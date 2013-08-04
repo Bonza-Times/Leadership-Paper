@@ -1,0 +1,33 @@
+#loading cmte crosswalk
+	cmte<-read.csv("C:\\Documents and Settings\\Ty\\My Documents\\leadership paper\\data\\CmteCIDbridge.csv")
+	names(cmte)
+#loading pac 06:10
+	pac02<-read.csv("C:\\Documents and Settings\\Ty\\My Documents\\Krasno.RA\\Data\\crp data\\By Type\\pacs\\pacs02.csv")
+	pac04<-read.csv("C:\\Documents and Settings\\Ty\\My Documents\\Krasno.RA\\Data\\crp data\\By Type\\pacs\\pacs04.csv")
+	pac06<-read.csv("C:\\Documents and Settings\\Ty\\My Documents\\Krasno.RA\\Data\\crp data\\By Type\\pacs\\pacs06.csv")
+	pac08<-read.csv("C:\\Documents and Settings\\Ty\\My Documents\\Krasno.RA\\Data\\crp data\\By Type\\pacs\\pacs08.csv")
+#matching data
+#import empty dataset for sql
+	workit<-read.csv("C:\\Documents and Settings\\Ty\\My Documents\\leadership paper\\data\\sql.1.csv")
+#the fun begins
+	library(XML)
+	setwd("C:\\Documents and Settings\\Ty\\My Documents\\leadership paper\\data")
+#merge cmte & pac 02
+	attach(cmte)
+	attach(pac02)
+	c1<- merge(cmte,pac02,by.x="CID",by.y="CID")
+	c1
+	detach(cmte)
+	detach(pac02)
+#attaching c1
+	attach(c1)
+#write table
+out_file <- file("c1.csv", open="a")
+write.table(c1, file=out_file, sep=",", dec=".", quote=FALSE, 
+col.names=NA, row.names=TRUE)
+close(out_file)
+
+#libraries
+library(RSQLite)
+library(RSQLite.extfuns)
+sqlite <- dbDriver("SQLite")

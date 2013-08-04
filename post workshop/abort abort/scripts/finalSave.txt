@@ -1,0 +1,71 @@
+#load files
+	pac06<-read.csv("C:\\Documents and Settings\\Ty\\My Documents\\leadership paper\\pre-workshop\\data\\pac06.csv")
+	pac08<-read.csv("C:\\Documents and Settings\\Ty\\My Documents\\leadership paper\\pre-workshop\\data\\pac08.csv")
+	pacmatch<-read.csv("C:\\Documents and Settings\\Ty\\My Documents\\leadership paper\\pre-workshop\\data\\take 2\\pacmatch.csv")
+	
+##Separate Business from Labor
+	
+	library(sqldf)
+#business
+	Bpac06<-sqldf("select * from pacmatch where business=1 group by PACID")
+	Bpac08<-sqldf("select * from pacmatch where business=1 group by PACID")
+#labor
+	Lpac06<-sqldf("select * from pacmatch where labor=1 group by PACID")
+	Lpac08<-sqldf("select * from pacmatch where labor=1 group by PACID")
+
+##Drop excess PACs
+
+#business
+	bpac06<-sqldf("select * from Bpac06 join pac06 using (PACID)")
+	bpac08<-sqldf("select * from Bpac08 join pac08 using (PACID)")
+#labor
+	lpac06<-sqldf("select * from Lpac06 join pac06 using (PACID)")
+	lpac08<-sqldf("select * from Lpac08 join pac08 using (PACID)")
+
+##Sum amount of contributions to incumbent
+
+	b109<-sqldf("select Cycle, AdjAmount,FECCandID,FirstLastP,
+			Party,DistIDRunFor,sum(AdjAmount) as amount from bpac06 
+			group by FECCandID")
+	l109<-sqldf("select Cycle, AdjAmount,FECCandID,FirstLastP,
+			Party,DistIDRunFor,sum(AdjAmount) as amount from 
+			lpac06 group by FECCandID")
+	b110<-sqldf("select Cycle, AdjAmount,FECCandID,FirstLastP,
+			Party,DistIDRunFor,sum(AdjAmount) as amount from bpac08 
+			group by FECCandID")
+	l110<-sqldf("select Cycle, AdjAmount,FECCandID,FirstLastP,
+			Party,DistIDRunFor,sum(AdjAmount) as amount from lpac08
+			group by FECCandID")
+#write tables
+
+#write table
+#library
+	library(XML)
+	setwd("C:\\Documents and Settings\\Ty\\My Documents\\leadership paper\\final data\\abort abort")
+#writing table to csv
+	out_file <- file("b109.csv", open="a")
+	write.table(b109, file=out_file, sep=",", dec=".", quote=FALSE, 
+	col.names=NA, row.names=TRUE)
+	close(out_file)
+#check
+
+#writing table to csv
+	out_file <- file("l109.csv", open="a")
+	write.table(l109, file=out_file, sep=",", dec=".", quote=FALSE, 
+	col.names=NA, row.names=TRUE)
+	close(out_file)
+#check
+
+#writing table to csv
+	out_file <- file("b110.csv", open="a")
+	write.table(b110, file=out_file, sep=",", dec=".", quote=FALSE, 
+	col.names=NA, row.names=TRUE)
+	close(out_file)
+#check
+
+#writing table to csv
+	out_file <- file("l110.csv", open="a")
+	write.table(l110, file=out_file, sep=",", dec=".", quote=FALSE, 
+	col.names=NA, row.names=TRUE)
+	close(out_file)
+#check
