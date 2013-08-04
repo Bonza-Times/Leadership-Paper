@@ -8,3 +8,5 @@ cycle to election cycle.
 "pre-workshop" is work done before I presented at our department workshop. "post workshop" is work done after and 
 includes my submitted paper. "for fun" is a couple data visualizations I did in R for fun using ggplot2.
 
+The R library "sqldf" was used for the data work. 
+
